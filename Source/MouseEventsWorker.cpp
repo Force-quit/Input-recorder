@@ -1,11 +1,11 @@
-#include "MouseEventsWorker.h"
+#include "../Headers/MouseEventsWorker.h"
 
 #include <Windows.h>
 #include <QVector>
 #include <QThread>
 
-#include "EQMouseMoveEvent.h"
-#include "EQMouseClickEvent.h"
+#include "../Headers/EQMouseMoveEvent.h"
+#include "../Headers/EQMouseClickEvent.h"
 
 MouseEventsWorker::MouseEventsWorker(clock_t& currentRecTime)
 	: currentRecTime{ currentRecTime }, continueListening{}, readyToShare{}, lastMousePos{}, tempMousePos{},

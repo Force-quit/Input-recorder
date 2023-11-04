@@ -1,4 +1,4 @@
-#include "EQMouseClickEvent.h"
+#include "../Headers/EQMouseClickEvent.h"
 #include <Windows.h>
 
 EQMouseClickEvent::EQMouseClickEvent(clock_t positionInTime, POINT eventPosition, DWORD mouseData, DWORD dwFlags)

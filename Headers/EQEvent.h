@@ -10,7 +10,7 @@ public:
 	EQEvent(clock_t positionInTime);
 	~EQEvent();
 	
-	inline clock_t eventPlayTime() const
+	constexpr clock_t eventPlayTime() const
 	{
 		return eventPositionInTime;
 	}

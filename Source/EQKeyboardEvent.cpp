@@ -1,4 +1,4 @@
-#include "EQKeyboardEvent.h"
+#include "../Headers/EQKeyboardEvent.h"
 #include <Windows.h>
 
 EQKeyboardEvent::EQKeyboardEvent(clock_t positionInTime, DWORD vkCode, DWORD dwFlags)

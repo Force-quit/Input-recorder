@@ -1,6 +1,6 @@
-#include "KeyboardEventsWorker.h"
+#include "../Headers/KeyboardEventsWorker.h"
 #include <Windows.h>
-#include "EQKeyboardEvent.h"
+#include "../Headers/EQKeyboardEvent.h"
 #include <QThread>
 #include <QVector>
 #include <forward_list>

@@ -1,11 +1,11 @@
-#include "EQInputRecorder.h"
+#include "../Headers/EQInputRecorder.h"
 #include <QBoxLayout>
 #include <QLabel>
 #include <QGroupBox>
 #include <QIcon>
 #include <QPushButton>
 #include <QCheckBox>
-#include "EQInputRecorderWorker.h"
+#include "../Headers/EQInputRecorderWorker.h"
 
 EQInputRecorder::EQInputRecorder(QWidget *parent)
 	: QMainWindow(parent), workerThread(), worker{new EQInputRecorderWorker}, recordingButton{}, playbackButton{}

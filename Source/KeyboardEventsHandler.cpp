@@ -1,7 +1,7 @@
-#include "KeyboardEventsHandler.h"
+#include "../Headers/KeyboardEventsHandler.h"
 #include <QThread>
-#include "KeyboardEventsWorker.h"
-#include "EQKeyboardEvent.h"
+#include "../Headers/KeyboardEventsWorker.h"
+#include "../Headers/EQKeyboardEvent.h"
 #include <algorithm>
 #include <random>
 #include <QVector>

@@ -1,8 +1,8 @@
-#include "EQInputRecorderWorker.h"
+#include "../Headers/EQInputRecorderWorker.h"
 #include <QTimer>
 #include <QString>
 #include <Windows.h>
-#include "MouseEventsWorker.h"
+#include "../Headers/MouseEventsWorker.h"
 #include <QVector>
 
 EQInputRecorderWorker::EQInputRecorderWorker()

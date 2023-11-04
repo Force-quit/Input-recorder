@@ -1,4 +1,4 @@
-#include "EQMouseMoveEvent.h"
+#include "../Headers/EQMouseMoveEvent.h"
 #include <Windows.h>
 
 EQMouseMoveEvent::EQMouseMoveEvent(clock_t positionInTime, POINT eventPosition)
