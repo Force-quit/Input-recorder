@@ -19,9 +19,6 @@ EQMouseClickEvent& EQMouseClickEvent::operator=(const EQMouseClickEvent& other)
 	return *this;
 }
 
-EQMouseClickEvent::~EQMouseClickEvent()
-{}
-
 void EQMouseClickEvent::play(INPUT & input) const
 {
 	input.type = INPUT_MOUSE;

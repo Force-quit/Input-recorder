@@ -9,7 +9,6 @@ class EQMouseMoveEvent  : public EQEvent
 
 public:
 	EQMouseMoveEvent(clock_t positionInTime, POINT eventPosition);
-	~EQMouseMoveEvent();
 	EQMouseMoveEvent(const EQMouseMoveEvent& other);
 	EQMouseMoveEvent& operator=(const EQMouseMoveEvent& other);
 

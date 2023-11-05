@@ -2,11 +2,11 @@
 #include <Windows.h>
 
 EQKeyboardEvent::EQKeyboardEvent(clock_t positionInTime, DWORD vkCode, DWORD dwFlags)
-	: EQEvent(positionInTime), vkCode{vkCode}, dwFlags{dwFlags}
+	: EQEvent(positionInTime), vkCode{ vkCode }, dwFlags{ dwFlags }
 {
 }
 
-void EQKeyboardEvent::play(INPUT & input) const
+void EQKeyboardEvent::play(INPUT& input) const
 {
 	input.type = INPUT_KEYBOARD;
 	input.ki.wVk = vkCode;
@@ -14,10 +14,7 @@ void EQKeyboardEvent::play(INPUT & input) const
 	SendInput(1, &input, sizeof(INPUT));
 }
 
-EQKeyboardEvent::~EQKeyboardEvent()
-{}
-
-EQKeyboardEvent::EQKeyboardEvent(const EQKeyboardEvent & other)
+EQKeyboardEvent::EQKeyboardEvent(const EQKeyboardEvent& other)
 	: EQKeyboardEvent(other.eventPositionInTime, other.vkCode, other.dwFlags)
 {
 }

@@ -17,6 +17,3 @@ EQMouseMoveEvent& EQMouseMoveEvent::operator=(const EQMouseMoveEvent& other)
 	eventPositionInTime = other.eventPositionInTime;
 	return *this;
 }
-
-EQMouseMoveEvent::~EQMouseMoveEvent()
-{}

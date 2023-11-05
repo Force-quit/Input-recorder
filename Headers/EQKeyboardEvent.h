@@ -9,7 +9,6 @@ class EQKeyboardEvent  : public EQEvent
 
 public:
 	EQKeyboardEvent(clock_t positionInTime, DWORD vkCode, DWORD dwFlags);
-	~EQKeyboardEvent();
 
 	EQKeyboardEvent(const EQKeyboardEvent& other);
 	EQKeyboardEvent& operator=(const EQKeyboardEvent& other);
@@ -17,7 +16,7 @@ public:
 
 	void play(INPUT& input) const;
 
-	inline DWORD getVkCode() const
+	constexpr DWORD getVkCode() const
 	{
 		return vkCode;
 	}

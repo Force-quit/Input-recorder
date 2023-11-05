@@ -12,8 +12,6 @@ public:
 	EQMouseClickEvent(const EQMouseClickEvent& other);
 	EQMouseClickEvent& operator=(const EQMouseClickEvent& other);
 
-	~EQMouseClickEvent();
-
 	void play(INPUT& input) const;
 
 private:

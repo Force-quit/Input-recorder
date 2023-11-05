@@ -8,9 +8,8 @@ class EQEvent  : public QObject
 
 public:
 	EQEvent(clock_t positionInTime);
-	~EQEvent();
 	
-	constexpr clock_t eventPlayTime() const
+	[[nodiscard]] constexpr clock_t eventPlayTime() const
 	{
 		return eventPositionInTime;
 	}

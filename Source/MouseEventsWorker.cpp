@@ -7,28 +7,38 @@
 #include "../Headers/EQMouseMoveEvent.h"
 #include "../Headers/EQMouseClickEvent.h"
 
+const QVector<uint8_t> MouseEventsWorker::MOUSE_CLICK_VK{
+	VK_LBUTTON,
+	VK_RBUTTON,
+	VK_MBUTTON,
+	VK_XBUTTON1,
+	VK_XBUTTON2
+};
+
+const QHash<uint8_t, DWORD> MouseEventsWorker::KEY_UP_FLAGS{
+	{VK_LBUTTON, MOUSEEVENTF_LEFTUP },
+	{VK_RBUTTON, MOUSEEVENTF_RIGHTUP },
+	{VK_MBUTTON, MOUSEEVENTF_MIDDLEUP },
+	{VK_XBUTTON1, MOUSEEVENTF_XUP },
+	{VK_XBUTTON2, MOUSEEVENTF_XUP }
+};
+
+const QHash<uint8_t, DWORD> MouseEventsWorker::KEY_DOWN_FLAGS{
+	{VK_LBUTTON, MOUSEEVENTF_LEFTDOWN},
+	{VK_RBUTTON, MOUSEEVENTF_RIGHTDOWN},
+	{VK_MBUTTON, MOUSEEVENTF_MIDDLEDOWN},
+	{VK_XBUTTON1, MOUSEEVENTF_XDOWN},
+	{VK_XBUTTON2, MOUSEEVENTF_XDOWN}
+};
+
+const QHash<uint8_t, DWORD> MouseEventsWorker::mouseData{
+	{VK_XBUTTON1, XBUTTON1},
+	{VK_XBUTTON2, XBUTTON2}
+};
+
 MouseEventsWorker::MouseEventsWorker(clock_t& currentRecTime)
 	: currentRecTime{ currentRecTime }, continueListening{}, readyToShare{}, lastMousePos{}, tempMousePos{},
-	mouseClickEvents(), mousePressedKeys(), mouseKeysToRemove(), mouseMoveEvents(),
-	MOUSE_CLICK_VK{ VK_LBUTTON, VK_RBUTTON, VK_MBUTTON, VK_XBUTTON1, VK_XBUTTON2 },
-	KEY_UP_FLAGS{
-		{VK_LBUTTON, MOUSEEVENTF_LEFTUP},
-		{VK_RBUTTON, MOUSEEVENTF_RIGHTUP},
-		{VK_MBUTTON, MOUSEEVENTF_MIDDLEUP},
-		{VK_XBUTTON1, MOUSEEVENTF_XUP},
-		{VK_XBUTTON2, MOUSEEVENTF_XUP}
-	},
-	KEY_DOWN_FLAGS{
-		{VK_LBUTTON, MOUSEEVENTF_LEFTDOWN},
-		{VK_RBUTTON, MOUSEEVENTF_RIGHTDOWN},
-		{VK_MBUTTON, MOUSEEVENTF_MIDDLEDOWN},
-		{VK_XBUTTON1, MOUSEEVENTF_XDOWN},
-		{VK_XBUTTON2, MOUSEEVENTF_XDOWN}
-	},
-	mouseData{
-		{VK_XBUTTON1, XBUTTON1},
-		{VK_XBUTTON2, XBUTTON2}
-	}
+	mouseClickEvents(), mousePressedKeys(), mouseKeysToRemove(), mouseMoveEvents()
 {
 
 }
@@ -110,7 +120,7 @@ void MouseEventsWorker::checkMouseMoveEvents()
 	if (tempMousePos.x != lastMousePos.x || tempMousePos.y != lastMousePos.y)
 	{
 		lastMousePos = tempMousePos;
-		mouseMoveEvents.push_front(EQMouseMoveEvent(currentRecTime, lastMousePos));
+		mouseMoveEvents.emplace_front(currentRecTime, lastMousePos);
 	}
 }
 

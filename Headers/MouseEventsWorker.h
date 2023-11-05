@@ -41,8 +41,8 @@ private:
 
 	void reset();
 
-	const QVector<uint8_t> MOUSE_CLICK_VK;
-	const QHash<uint8_t, DWORD> KEY_UP_FLAGS;
-	const QHash<uint8_t, DWORD> KEY_DOWN_FLAGS;
-	const QHash<uint8_t, DWORD> mouseData;
+	static const QVector<uint8_t> MOUSE_CLICK_VK;
+	static const QHash<uint8_t, DWORD> KEY_UP_FLAGS;
+	static const QHash<uint8_t, DWORD> KEY_DOWN_FLAGS;
+	static const QHash<uint8_t, DWORD> mouseData;
 };
