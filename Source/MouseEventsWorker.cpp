@@ -116,12 +116,12 @@ void MouseEventsWorker::checkMouseClickEvents()
 
 void MouseEventsWorker::checkMouseMoveEvents()
 {
-	GetCursorPos(&tempMousePos);
+	/*GetCursorPos(&tempMousePos);
 	if (tempMousePos.x != lastMousePos.x || tempMousePos.y != lastMousePos.y)
 	{
 		lastMousePos = tempMousePos;
 		mouseMoveEvents.emplace_front(currentRecTime, lastMousePos);
-	}
+	}*/
 }
 
 void MouseEventsWorker::reset()

@@ -9,11 +9,13 @@
 #include <QSet>
 
 #include "MouseEventsWorker.h"
+#include "MouseMoveEventsWorker.h"
 #include "KeyboardEventsHandler.h"
 
 #include "EQMouseClickEvent.h"
 #include "EQMouseMoveEvent.h"
 #include "EQKeyboardEvent.h"
+
 
 
 class EQInputRecorderWorker  : public QObject
@@ -29,7 +31,6 @@ public:
 public slots:
 	void startRecording();
 	void startPlayback();
-
 
 signals:
 	void textChanged(const QString& newText);
@@ -58,5 +59,6 @@ private:
 
 	QThread mouseEventsThread;
 	MouseEventsWorker* mouseEventsWorker;
+	MouseMoveEventsWorker mouseMoveEventsWorker;
 	KeyboardEventsHandler keyboardEventsHandler;
 };

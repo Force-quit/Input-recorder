@@ -99,6 +99,7 @@
     <ClCompile Include="Source\KeyboardEventsWorker.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\MouseEventsWorker.cpp" />
+    <ClCompile Include="Source\MouseMoveEventsWorker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Headers\EQEvent.h" />
@@ -129,6 +130,10 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\inputRecorder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headers\MouseMoveEvent.h" />
+    <ClInclude Include="Headers\MouseMoveEventsWorker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
