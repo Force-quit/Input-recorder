@@ -8,7 +8,7 @@
 class MouseMoveEventsWorker
 {
 public:
-	MouseMoveEventsWorker(clock_t& currentRecTime);
+	MouseMoveEventsWorker(clock_t& globalClock);
 	~MouseMoveEventsWorker();
 
 	void startListening();
@@ -18,11 +18,11 @@ public:
 	std::vector<MouseMoveEvent>::const_iterator constEndIterator() const;
 
 private:
-	const clock_t& currentRecTime;
-	bool continueListening;
+	const clock_t& mGlobalClock;
+	bool mContinueListening;
 
-	std::vector<MouseMoveEvent> mouseMoveEvents;
-	std::thread listenThread;
+	std::vector<MouseMoveEvent> mMouseMoveEvents;
+	std::thread mListenThread;
 
 	void listenLoop();
 };

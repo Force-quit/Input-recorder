@@ -1,17 +1,17 @@
 #include "../Headers/MouseMoveEventsWorker.h"
 
 MouseMoveEventsWorker::MouseMoveEventsWorker(clock_t& currentRecTime)
-	: currentRecTime{currentRecTime},
-	continueListening{},
-	mouseMoveEvents(),
-	listenThread()
+	: mGlobalClock{currentRecTime},
+	mContinueListening{},
+	mMouseMoveEvents(),
+	mListenThread()
 {
 
 }
 
 MouseMoveEventsWorker::~MouseMoveEventsWorker()
 {
-	if (listenThread.joinable())
+	if (mListenThread.joinable())
 	{
 		stopListening();
 	}
@@ -19,40 +19,40 @@ MouseMoveEventsWorker::~MouseMoveEventsWorker()
 
 void MouseMoveEventsWorker::stopListening()
 {
-	continueListening = false;
-	listenThread.join();
+	mContinueListening = false;
+	mListenThread.join();
 }
 
 void MouseMoveEventsWorker::startListening()
 {
-	continueListening = true;
-	mouseMoveEvents.clear();
-	listenThread = std::thread(&MouseMoveEventsWorker::listenLoop, this);
+	mContinueListening = true;
+	mMouseMoveEvents.clear();
+	mListenThread = std::thread(&MouseMoveEventsWorker::listenLoop, this);
 }
 
 std::vector<MouseMoveEvent>::const_iterator MouseMoveEventsWorker::constBeginIterator() const
 {
-	return mouseMoveEvents.cbegin();
+	return mMouseMoveEvents.cbegin();
 }
 
 std::vector<MouseMoveEvent>::const_iterator MouseMoveEventsWorker::constEndIterator() const
 {
-	return mouseMoveEvents.cend();
+	return mMouseMoveEvents.cend();
 }
 
 void MouseMoveEventsWorker::listenLoop()
 {
-	POINT previousMousePos;
-	GetCursorPos(&previousMousePos);
+	POINT wPreviousMousePos;
+	GetCursorPos(&wPreviousMousePos);
 
-	POINT tempPoint;
-	while (continueListening)
+	POINT wTempPoint;
+	while (mContinueListening)
 	{
-		GetCursorPos(&tempPoint);
-		if (tempPoint.x != previousMousePos.x || tempPoint.y != previousMousePos.y)
+		GetCursorPos(&wTempPoint);
+		if (wTempPoint.x != wPreviousMousePos.x || wTempPoint.y != wPreviousMousePos.y)
 		{
-			previousMousePos = tempPoint;
-			mouseMoveEvents.emplace_back(currentRecTime, previousMousePos);
+			wPreviousMousePos = wTempPoint;
+			mMouseMoveEvents.emplace_back(mGlobalClock, wPreviousMousePos);
 		}
 
 		// Maybe a sleep here
