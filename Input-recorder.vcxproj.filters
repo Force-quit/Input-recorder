@@ -53,7 +53,7 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\inputRecorder.png">
+    <Image Include="Resources\writing.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -76,5 +76,18 @@
     <ClInclude Include="Headers\KeyboardEventsWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Resources\resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Input-recorder.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resources\Resource.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

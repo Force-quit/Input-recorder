@@ -116,18 +116,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\KeyboardEvent.h" />
+    <ClInclude Include="Resources\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\KeyboardEventsWorker.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\inputRecorder.png" />
+    <Image Include="Resources\writing.ico" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\MouseClickEvent.h" />
     <ClInclude Include="Headers\MouseClickEventsWorker.h" />
     <ClInclude Include="Headers\MouseMoveEvent.h" />
     <ClInclude Include="Headers\MouseMoveEventsWorker.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources\Input-recorder.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resources\Resource.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

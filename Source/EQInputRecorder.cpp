@@ -30,7 +30,7 @@ EQInputRecorder::EQInputRecorder(QWidget *parent)
 	centralLayout->addLayout(bottomLayout);
 	centralWidget->setLayout(centralLayout);
 	setCentralWidget(centralWidget);
-	setWindowIcon(QIcon("inputRecorder.png"));
+	setWindowIcon(QIcon(":/images/writing.png"));
 }
 
 
