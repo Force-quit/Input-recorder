@@ -8,15 +8,11 @@
 #include <QVector>
 #include <QSet>
 
-#include "MouseEventsWorker.h"
 #include "MouseMoveEventsWorker.h"
+#include "MouseClickEventsWorker.h"
+
 #include "KeyboardEventsHandler.h"
-
-#include "EQMouseClickEvent.h"
-#include "EQMouseMoveEvent.h"
 #include "EQKeyboardEvent.h"
-
-
 
 class EQInputRecorderWorker  : public QObject
 {
@@ -24,7 +20,6 @@ class EQInputRecorderWorker  : public QObject
 
 public:
 	EQInputRecorderWorker();
-	~EQInputRecorderWorker();
 
 	void setPlaybackLoop(bool playbackLoop);
 
@@ -51,14 +46,12 @@ private:
 	void startRealPlayBack();
 	bool checkPlaybackStop();
 
-	QVector<EQMouseClickEvent> mouseClickEvents;
-	QVector<EQMouseMoveEvent> mouseMoveEvents;
 	QVector<EQKeyboardEvent> keyboardEvents;
 	clock_t recordingTime;
 	bool playbackLoop;
 
 	QThread mouseEventsThread;
-	MouseEventsWorker* mouseEventsWorker;
+	MouseClickEventsWorker mouseClickEventsWorker;
 	MouseMoveEventsWorker mouseMoveEventsWorker;
 	KeyboardEventsHandler keyboardEventsHandler;
 };

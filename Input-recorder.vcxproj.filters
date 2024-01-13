@@ -31,25 +31,22 @@
     <ClCompile Include="Source\EQKeyboardEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EQMouseClickEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EQMouseMoveEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\KeyboardEventsHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\KeyboardEventsWorker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MouseEventsWorker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\MouseMoveEventsWorker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MouseClickEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MouseClickEventsWorker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,19 +63,10 @@
     <QtMoc Include="Headers\EQKeyboardEvent.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="Headers\EQMouseClickEvent.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Headers\EQMouseMoveEvent.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="Headers\KeyboardEventsHandler.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Headers\KeyboardEventsWorker.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Headers\MouseEventsWorker.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -92,6 +80,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Headers\MouseMoveEventsWorker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\MouseClickEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\MouseClickEventsWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
