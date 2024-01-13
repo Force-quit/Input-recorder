@@ -19,19 +19,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\EQEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\EQInputRecorder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\EQInputRecorderWorker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EQKeyboardEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\KeyboardEventsHandler.cpp">
+    <ClCompile Include="Source\KeyboardEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\KeyboardEventsWorker.cpp">
@@ -51,22 +45,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Headers\EQEvent.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="Headers\EQInputRecorder.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Headers\EQInputRecorderWorker.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Headers\EQKeyboardEvent.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Headers\KeyboardEventsHandler.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="Headers\KeyboardEventsWorker.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -86,6 +68,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Headers\MouseClickEventsWorker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\KeyboardEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\KeyboardEventsWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

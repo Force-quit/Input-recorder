@@ -46,6 +46,8 @@ void MouseClickEventsWorker::listenLoop()
 	std::set<uint8_t> mousePressedKeys;
 	POINT mousePos{};
 
+	resetWindowsPressedKeysBuffer();
+
 	while (mContinueListening)
 	{
 		for (uint8_t observedKey : MouseClickEvent::VK)
@@ -64,8 +66,16 @@ void MouseClickEventsWorker::listenLoop()
 				mMouseClickEvents.emplace_back(mGlobalClock, mousePos, observedKey, MouseClickEvent::KeyState::KEY_UP);
 				mousePressedKeys.erase(observedKey);
 			}
-
-			std::this_thread::sleep_for(std::chrono::milliseconds(1)); // Otherwise this function takes too much CPU power
 		}
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+}
+
+void MouseClickEventsWorker::resetWindowsPressedKeysBuffer()
+{
+	for (uint8_t observedKey : MouseClickEvent::VK)
+	{
+		GetAsyncKeyState(observedKey);
 	}
 }

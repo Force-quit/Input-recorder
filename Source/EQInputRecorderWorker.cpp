@@ -2,16 +2,15 @@
 #include <QTimer>
 #include <QString>
 #include <Windows.h>
-#include <QVector>
+#include <QThread>
 
 EQInputRecorderWorker::EQInputRecorderWorker()
-	: recordingTime{}, playbackLoop{},
-	keyboardEventsHandler(this, recordingTime),
-	keyboardEvents(),
+	: recordingTime{}, 
+	playbackLoop{},
 	mouseClickEventsWorker(recordingTime),
-	mouseMoveEventsWorker(recordingTime)
+	mouseMoveEventsWorker(recordingTime),
+	keyboardEventsWorker(recordingTime)
 {
-	connect(this, &EQInputRecorderWorker::startListening, &keyboardEventsHandler, &KeyboardEventsHandler::startListening);
 }
 
 void EQInputRecorderWorker::startRecording()
@@ -30,11 +29,12 @@ void EQInputRecorderWorker::startRealRecording()
 	clock_t start{ std::clock() };
 	recordingTime = start;
 	emit textChanged("Recording started");
-	emit startListening();
 
+	keyboardEventsWorker.startListening();
 	mouseClickEventsWorker.startListening();
 	mouseMoveEventsWorker.startListening();
-
+	
+	GetAsyncKeyState(VK_ESCAPE);
 	while (!GetAsyncKeyState(VK_ESCAPE))
 	{
 		recordingTime = std::clock() - start;
@@ -45,12 +45,7 @@ void EQInputRecorderWorker::startRealRecording()
 
 	mouseMoveEventsWorker.stopListening();
 	mouseClickEventsWorker.stopListening();
-	keyboardEventsHandler.stopListening();
-
-	keyboardEvents = keyboardEventsHandler.getKeyboardEvents();
-
-	if (keyboardEvents.back().getVkCode() == VK_ESCAPE)
-		keyboardEvents.removeLast();
+	keyboardEventsWorker.stopListening();
 
 	emit textChanged("Finished recording");
 	emit finishedRecording();
@@ -64,18 +59,15 @@ void EQInputRecorderWorker::startRealPlayBack()
 	auto mouseClickEventsIt = mouseClickEventsWorker.constBeginIterator();
 	const auto mouseClickEventsEndIt = mouseClickEventsWorker.constEndIterator();
 
-	auto keyboardEventsIt = keyboardEvents.begin();
+	auto keyboardEventsIt = keyboardEventsWorker.constBeginIterator();
+	const auto keyboardEventsEndIt = keyboardEventsWorker.constEndIterator();
 
 	long currentPlaybackTime{};
 	clock_t playbackStart{ std::clock() };
-
-	EQKeyboardEvent* nextKeyboardEvent{};
 	INPUT input{};
-
 	bool userStopped{};
 	
 	SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
-
 
 	emit textChanged("Playback started");
 
@@ -95,7 +87,7 @@ void EQInputRecorderWorker::startRealPlayBack()
 			++mouseClickEventsIt;
 		}
 		
-		while (keyboardEventsIt != keyboardEvents.end() && keyboardEventsIt->eventPlayTime() <= currentPlaybackTime)
+		while (keyboardEventsIt != keyboardEventsEndIt && keyboardEventsIt->eventTime() <= currentPlaybackTime)
 		{
 			keyboardEventsIt->play(input);
 			++keyboardEventsIt;

@@ -1,34 +1,27 @@
 #pragma once
 
-#include <QObject>
-#include <QVector>
-#include <QSet>
-#include "EQKeyboardEvent.h"
-#include <forward_list>
+#include "KeyboardEvent.h"
+#include <thread>
 
-
-class KeyboardEventsWorker  : public QObject
+class KeyboardEventsWorker
 {
-	Q_OBJECT
-
 public:
-	KeyboardEventsWorker(clock_t& currentRecTime, QVector<uint8_t> keys);
+	KeyboardEventsWorker(clock_t& globalClock);
 	~KeyboardEventsWorker();
 
-	void stopListening();
-	QVector<EQKeyboardEvent> getKeyboardEvents() const;
-	bool isReadyToShare() const;
-
-public slots:
 	void startListening();
+	void stopListening();
+
+	std::vector<KeyboardEvent>::const_iterator constBeginIterator() const;
+	std::vector<KeyboardEvent>::const_iterator constEndIterator() const;
 
 private:
-	const clock_t& currentRecTime;
-	bool continueListening;
-	const QVector<uint8_t> targetKeys;
-	bool readyToShare;
-	void reset();
-	QSet<uint8_t> pressedKeys;
-	QVector<uint8_t> keysToRemove;
-	std::forward_list<EQKeyboardEvent> keyboardEvents;
+	const clock_t& mGlobalClock;
+	bool mContinueListening;
+
+	std::vector<KeyboardEvent> mKeyboardEvents;
+	std::thread mListenThread;
+
+	void listenLoop();
+	void resetWindowsPressedKeysBuffer();
 };

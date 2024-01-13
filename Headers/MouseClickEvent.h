@@ -10,7 +10,7 @@ class MouseClickEvent
 public:
 	static const std::vector<int8_t> VK;
 
-	enum KeyState
+	enum class KeyState
 	{
 		KEY_UP,
 		KEY_DOWN
@@ -26,8 +26,8 @@ public:
 	void play(INPUT& tempInput) const;
 
 private:
-	DWORD convertEventFlags(int8_t pressedKey, KeyState keyState) const;
-	DWORD convertMouseData(int8_t pressedKey) const;
+	static DWORD convertEventFlags(int8_t pressedKey, KeyState keyState);
+	static DWORD convertMouseData(int8_t pressedKey);
 
 	static const std::unordered_map<int8_t, DWORD> KEY_UP_FLAGS;
 	static const std::unordered_map<int8_t, DWORD> KEY_DOWN_FLAGS;

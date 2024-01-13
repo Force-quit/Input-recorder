@@ -52,12 +52,12 @@ void MouseClickEvent::play(INPUT& tempInput) const
 	SendInput(1, &tempInput, sizeof(INPUT));
 }
 
-DWORD MouseClickEvent::convertEventFlags(int8_t pressedKey, KeyState keyState) const
+DWORD MouseClickEvent::convertEventFlags(int8_t pressedKey, KeyState keyState)
 {
-	return keyState == KEY_DOWN ? KEY_DOWN_FLAGS.at(pressedKey) : KEY_UP_FLAGS.at(pressedKey);
+	return keyState == KeyState::KEY_DOWN ? KEY_DOWN_FLAGS.at(pressedKey) : KEY_UP_FLAGS.at(pressedKey);
 }
 
-DWORD MouseClickEvent::convertMouseData(int8_t pressedKey) const
+DWORD MouseClickEvent::convertMouseData(int8_t pressedKey)
 {
 	return MOUSE_DATA.contains(pressedKey) ? MOUSE_DATA.at(pressedKey) : 0;
 }

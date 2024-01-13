@@ -55,6 +55,6 @@ void MouseMoveEventsWorker::listenLoop()
 			mMouseMoveEvents.emplace_back(mGlobalClock, wPreviousMousePos);
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1)); // Otherwise this function takes too much CPU power
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }

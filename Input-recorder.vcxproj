@@ -99,19 +99,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\EQEvent.cpp" />
     <ClCompile Include="Source\EQInputRecorder.cpp" />
     <ClCompile Include="Source\EQInputRecorderWorker.cpp" />
-    <ClCompile Include="Source\EQKeyboardEvent.cpp" />
-    <ClCompile Include="Source\KeyboardEventsHandler.cpp" />
+    <ClCompile Include="Source\KeyboardEvent.cpp" />
     <ClCompile Include="Source\KeyboardEventsWorker.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\MouseClickEvent.cpp" />
     <ClCompile Include="Source\MouseClickEventsWorker.cpp" />
     <ClCompile Include="Source\MouseMoveEventsWorker.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="Headers\EQEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="Headers\EQInputRecorder.h" />
@@ -120,13 +115,10 @@
     <QtMoc Include="Headers\EQInputRecorderWorker.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Headers\EQKeyboardEvent.h" />
+    <ClInclude Include="Headers\KeyboardEvent.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Headers\KeyboardEventsHandler.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="Headers\KeyboardEventsWorker.h" />
+    <ClInclude Include="Headers\KeyboardEventsWorker.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\inputRecorder.png" />

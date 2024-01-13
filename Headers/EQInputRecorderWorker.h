@@ -2,17 +2,11 @@
 
 #include <Windows.h>
 #include <QObject>
-#include <QThread>
-
 #include <QString>
-#include <QVector>
-#include <QSet>
 
 #include "MouseMoveEventsWorker.h"
 #include "MouseClickEventsWorker.h"
-
-#include "KeyboardEventsHandler.h"
-#include "EQKeyboardEvent.h"
+#include "KeyboardEventsWorker.h"
 
 class EQInputRecorderWorker  : public QObject
 {
@@ -33,11 +27,6 @@ signals:
 	void finishedPlayback();
 	void canceledPlaybackLoop();
 
-private slots:
-
-signals:
-	void startListening();
-
 private:
 	const uint8_t COUNTDOWN{ 3 };
 	void setupTimers(const bool recording);
@@ -46,12 +35,10 @@ private:
 	void startRealPlayBack();
 	bool checkPlaybackStop();
 
-	QVector<EQKeyboardEvent> keyboardEvents;
 	clock_t recordingTime;
 	bool playbackLoop;
 
-	QThread mouseEventsThread;
 	MouseClickEventsWorker mouseClickEventsWorker;
 	MouseMoveEventsWorker mouseMoveEventsWorker;
-	KeyboardEventsHandler keyboardEventsHandler;
+	KeyboardEventsWorker keyboardEventsWorker;
 };

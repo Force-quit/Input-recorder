@@ -27,4 +27,5 @@ private:
 	std::thread mListenThread;
 
 	void listenLoop();
+	void resetWindowsPressedKeysBuffer();
 };
