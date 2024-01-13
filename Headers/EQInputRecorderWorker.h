@@ -22,7 +22,7 @@ public slots:
 	void startPlayback();
 
 signals:
-	void textChanged(const QString& newText);
+	void displayText(const QString& newText);
 	void finishedRecording();
 	void finishedPlayback();
 

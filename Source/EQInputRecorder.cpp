@@ -54,7 +54,7 @@ QGroupBox* EQInputRecorder::initOutputGroupBox()
 
 	QLabel* outputLabel{ new QLabel("Current status :") };
 	QLabel* ouputText{ new QLabel("Inactive") };
-	connect(worker, &EQInputRecorderWorker::textChanged, ouputText, &QLabel::setText);
+	connect(worker, &EQInputRecorderWorker::displayText, ouputText, &QLabel::setText);
 
 	groupBoxLayout->addWidget(outputLabel);
 	groupBoxLayout->addWidget(ouputText);

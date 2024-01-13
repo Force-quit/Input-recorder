@@ -26,9 +26,10 @@ void EQInputRecorderWorker::startPlayback()
 
 void EQInputRecorderWorker::record()
 {
-	clock_t start{ std::clock() };
-	mGlobalClock = start;
-	emit textChanged("Recording started");
+	emit displayText("Recording started");
+
+	clock_t wRecordingStart{ std::clock() };
+	mGlobalClock = wRecordingStart;
 
 	mKeyboardWorker.startListening();
 	mMouseClickWorker.startListening();
@@ -37,29 +38,28 @@ void EQInputRecorderWorker::record()
 	GetAsyncKeyState(VK_ESCAPE);
 	while (!GetAsyncKeyState(VK_ESCAPE))
 	{
-		mGlobalClock = std::clock() - start;
+		mGlobalClock = std::clock() - wRecordingStart;
 		QThread::msleep(1);
 	}
-
-	emit textChanged("Processing data..");
 
 	mPreviousRecordingTime = mGlobalClock;
 	mMouseMoveWorker.stopListening();
 	mMouseClickWorker.stopListening();
 	mKeyboardWorker.stopListening();
 
-	emit textChanged("Finished recording");
 	emit finishedRecording();
+	emit displayText("Finished recording");
 }
 
 void EQInputRecorderWorker::playback()
 {
+	emit displayText("Playback started");
 	bool wUserStopped{};
 	EXECUTION_STATE wPreviousExecutionState{ SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED) };
 	INPUT wTempInputStruct{};
-	emit textChanged("Playback started");
+	GetAsyncKeyState(VK_ESCAPE);
 
-	do
+	do // Playback loop
 	{
 		auto wMouseMoveEventsIt = mMouseMoveWorker.constBeginIterator();
 		auto wMouseClickEventsIt = mMouseClickWorker.constBeginIterator();
@@ -67,7 +67,7 @@ void EQInputRecorderWorker::playback()
 
 		clock_t wPlaybackStart{ std::clock() };
 
-		do
+		do // Playback execution
 		{
 			mGlobalClock = std::clock() - wPlaybackStart;
 
@@ -97,8 +97,8 @@ void EQInputRecorderWorker::playback()
 	} while (mLooping && !wUserStopped);
 	
 	emit finishedPlayback();
-	emit textChanged("Playback ended");
 	SetThreadExecutionState(wPreviousExecutionState);
+	emit displayText("Playback ended");
 }
 
 void EQInputRecorderWorker::prepareFor(Sequence sequence)
@@ -120,7 +120,7 @@ void EQInputRecorderWorker::prepareFor(Sequence sequence)
 	{
 		QTimer::singleShot(i * 1000, [=]()
 			{
-				emit textChanged(textToShow + " in " + QString::number(COUNTDOWN - i) + "...");
+				emit displayText(textToShow + " in " + QString::number(COUNTDOWN - i) + "...");
 			});
 	}
 }
