@@ -38,12 +38,12 @@ public:
 		mListenThread.join();
 	}
 
-	std::vector<EventClass>::const_iterator constBeginIterator() const
+	constexpr std::vector<EventClass>::const_iterator constBeginIterator() const
 	{
 		return mEvents.cbegin();
 	}
 
-	std::vector<EventClass>::const_iterator constEndIterator() const
+	constexpr std::vector<EventClass>::const_iterator constEndIterator() const
 	{
 		return mEvents.cend();
 	}

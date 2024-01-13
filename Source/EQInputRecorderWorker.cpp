@@ -54,13 +54,8 @@ void EQInputRecorderWorker::startRealRecording()
 void EQInputRecorderWorker::startRealPlayBack()
 {
 	auto mouseMoveEventsIt = mouseMoveEventsWorker.constBeginIterator();
-	const auto mouseMoveEventsEndIt = mouseMoveEventsWorker.constEndIterator();
-
 	auto mouseClickEventsIt = mouseClickEventsWorker.constBeginIterator();
-	const auto mouseClickEventsEndIt = mouseClickEventsWorker.constEndIterator();
-
 	auto keyboardEventsIt = keyboardEventsWorker.constBeginIterator();
-	const auto keyboardEventsEndIt = keyboardEventsWorker.constEndIterator();
 
 	long currentPlaybackTime{};
 	clock_t playbackStart{ std::clock() };
@@ -75,19 +70,19 @@ void EQInputRecorderWorker::startRealPlayBack()
 	{
 		currentPlaybackTime = std::clock() - playbackStart;
 
-		while (mouseMoveEventsIt != mouseMoveEventsEndIt && mouseMoveEventsIt->eventPlayTime() <= currentPlaybackTime)
+		while (mouseMoveEventsIt != mouseMoveEventsWorker.constEndIterator() && mouseMoveEventsIt->eventPlayTime() <= currentPlaybackTime)
 		{
 			mouseMoveEventsIt->play();
 			++mouseMoveEventsIt;
 		}
 
-		while (mouseClickEventsIt != mouseClickEventsEndIt && mouseClickEventsIt->eventTime() <= currentPlaybackTime)
+		while (mouseClickEventsIt != mouseClickEventsWorker.constEndIterator() && mouseClickEventsIt->eventTime() <= currentPlaybackTime)
 		{
 			mouseClickEventsIt->play(input);
 			++mouseClickEventsIt;
 		}
 		
-		while (keyboardEventsIt != keyboardEventsEndIt && keyboardEventsIt->eventTime() <= currentPlaybackTime)
+		while (keyboardEventsIt != keyboardEventsWorker.constEndIterator() && keyboardEventsIt->eventTime() <= currentPlaybackTime)
 		{
 			keyboardEventsIt->play(input);
 			++keyboardEventsIt;
