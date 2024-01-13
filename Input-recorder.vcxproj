@@ -123,6 +123,7 @@
     <QtMoc Include="Headers\EQInputRecorderWorker.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Headers\EventsWorker.h" />
     <ClInclude Include="Headers\KeyboardEvent.h" />
     <ClInclude Include="Resources\resource.h" />
   </ItemGroup>

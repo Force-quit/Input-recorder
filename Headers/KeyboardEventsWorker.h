@@ -1,27 +1,14 @@
 #pragma once
 
 #include "KeyboardEvent.h"
-#include <thread>
+#include "EventsWorker.h"
 
-class KeyboardEventsWorker
+class KeyboardEventsWorker : public EventsWorker<KeyboardEvent>
 {
 public:
 	KeyboardEventsWorker(clock_t& globalClock);
-	~KeyboardEventsWorker();
 
-	void startListening();
-	void stopListening();
-
-	std::vector<KeyboardEvent>::const_iterator constBeginIterator() const;
-	std::vector<KeyboardEvent>::const_iterator constEndIterator() const;
-
-private:
-	const clock_t& mGlobalClock;
-	bool mContinueListening;
-
-	std::vector<KeyboardEvent> mKeyboardEvents;
-	std::thread mListenThread;
-
-	void listenLoop();
-	void resetWindowsPressedKeysBuffer();
+protected:
+	void listenLoop() override;
+	void resetWindowsPressedKeysBuffer() override;
 };
