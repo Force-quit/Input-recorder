@@ -29,10 +29,17 @@ signals:
 
 private:
 	static constexpr uint8_t COUNTDOWN{ 3 };
-	void setupTimers(const bool recording);
 
-	void startRealRecording();
-	void startRealPlayBack();
+	enum class Sequence
+	{
+		PLAYBACK,
+		RECORDING
+	};
+
+	void prepareFor(Sequence sequence);
+
+	void record();
+	void playback();
 	bool checkPlaybackStop();
 
 	clock_t mGlobalClock;
