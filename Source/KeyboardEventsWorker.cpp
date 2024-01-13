@@ -1,51 +1,15 @@
 #include "../Headers/KeyboardEventsWorker.h"
 #include <set>
 
-KeyboardEventsWorker::KeyboardEventsWorker(clock_t& currentRecTime)
-	: mGlobalClock{ currentRecTime },
-	mContinueListening{},
-	mKeyboardEvents(),
-	mListenThread()
+KeyboardEventsWorker::KeyboardEventsWorker(clock_t& globalClock)
+	: EventsWorker(globalClock)
 {
 
-}
-
-KeyboardEventsWorker::~KeyboardEventsWorker()
-{
-	if (mListenThread.joinable())
-	{
-		stopListening();
-	}
-}
-
-void KeyboardEventsWorker::stopListening()
-{
-	mContinueListening = false;
-	mListenThread.join();
-}
-
-void KeyboardEventsWorker::startListening()
-{
-	mContinueListening = true;
-	mKeyboardEvents.clear();
-	mListenThread = std::thread(&KeyboardEventsWorker::listenLoop, this);
-}
-
-std::vector<KeyboardEvent>::const_iterator KeyboardEventsWorker::constBeginIterator() const
-{
-	return mKeyboardEvents.cbegin();
-}
-
-std::vector<KeyboardEvent>::const_iterator KeyboardEventsWorker::constEndIterator() const
-{
-	return mKeyboardEvents.cend();
 }
 
 void KeyboardEventsWorker::listenLoop()
 {
-	std::set<uint8_t> pressedKeys;
-
-	resetWindowsPressedKeysBuffer();
+	std::set<uint8_t> wPressedKeys;
 
 	while (mContinueListening)
 	{
@@ -53,16 +17,16 @@ void KeyboardEventsWorker::listenLoop()
 		{
 			if (GetAsyncKeyState(observedKey))
 			{
-				if (!pressedKeys.contains(observedKey))
+				if (!wPressedKeys.contains(observedKey))
 				{
-					mKeyboardEvents.emplace_back(mGlobalClock, observedKey, KeyboardEvent::KeyState::KEY_DOWN);
-					pressedKeys.insert(observedKey);
+					mEvents.emplace_back(mGlobalClock, observedKey, KeyboardEvent::KeyState::KEY_DOWN);
+					wPressedKeys.insert(observedKey);
 				}
 			}
-			else if (pressedKeys.contains(observedKey))
+			else if (wPressedKeys.contains(observedKey))
 			{
-				mKeyboardEvents.emplace_back(mGlobalClock, observedKey, KeyboardEvent::KeyState::KEY_UP);
-				pressedKeys.erase(observedKey);
+				mEvents.emplace_back(mGlobalClock, observedKey, KeyboardEvent::KeyState::KEY_UP);
+				wPressedKeys.erase(observedKey);
 			}
 		}
 
@@ -70,14 +34,14 @@ void KeyboardEventsWorker::listenLoop()
 	}
 
 	// escape key up
-	if (mKeyboardEvents.back().virtualKey() == VK_ESCAPE)
+	if (mEvents.back().virtualKey() == VK_ESCAPE)
 	{
-		mKeyboardEvents.pop_back(); 
+		mEvents.pop_back(); 
 	}
 	// escape key down
-	if (mKeyboardEvents.back().virtualKey() == VK_ESCAPE)
+	if (mEvents.back().virtualKey() == VK_ESCAPE)
 	{
-		mKeyboardEvents.pop_back();
+		mEvents.pop_back();
 	}
 }
 
