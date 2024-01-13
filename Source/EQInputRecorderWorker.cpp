@@ -6,7 +6,7 @@
 
 EQInputRecorderWorker::EQInputRecorderWorker()
 	: mGlobalClock{},
-	mLooping{},
+	mPlaybackLooping{},
 	mPreviousRecordingTime{},
 	mMouseClickWorker(mGlobalClock),
 	mMouseMoveWorker(mGlobalClock),
@@ -54,7 +54,7 @@ void EQInputRecorderWorker::record()
 void EQInputRecorderWorker::playback()
 {
 	emit displayText("Playback started");
-	bool wUserStopped{};
+	bool wUserStoppedPlayback{};
 	EXECUTION_STATE wPreviousExecutionState{ SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED) };
 	INPUT wTempInputStruct{};
 	GetAsyncKeyState(VK_ESCAPE);
@@ -91,10 +91,10 @@ void EQInputRecorderWorker::playback()
 
 			QThread::msleep(1);
 
-			wUserStopped = GetAsyncKeyState(VK_ESCAPE);
+			wUserStoppedPlayback = GetAsyncKeyState(VK_ESCAPE);
 
-		} while (mGlobalClock < mPreviousRecordingTime && !wUserStopped);
-	} while (mLooping && !wUserStopped);
+		} while (mGlobalClock < mPreviousRecordingTime && !wUserStoppedPlayback);
+	} while (mPlaybackLooping && !wUserStoppedPlayback);
 	
 	emit finishedPlayback();
 	SetThreadExecutionState(wPreviousExecutionState);
@@ -127,5 +127,5 @@ void EQInputRecorderWorker::prepareFor(Sequence sequence)
 
 void EQInputRecorderWorker::setPlaybackLoop(bool playbackLoop)
 {
-	mLooping = playbackLoop;
+	mPlaybackLooping = playbackLoop;
 }

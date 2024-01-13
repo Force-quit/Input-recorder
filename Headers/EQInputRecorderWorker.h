@@ -42,7 +42,7 @@ private:
 
 	clock_t mGlobalClock;
 	clock_t mPreviousRecordingTime;
-	bool mLooping;
+	bool mPlaybackLooping;
 
 	MouseClickEventsWorker mMouseClickWorker;
 	MouseMoveEventsWorker mMouseMoveWorker;
