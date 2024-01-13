@@ -25,7 +25,6 @@ signals:
 	void textChanged(const QString& newText);
 	void finishedRecording();
 	void finishedPlayback();
-	void canceledPlaybackLoop();
 
 private:
 	static constexpr uint8_t COUNTDOWN{ 3 };
@@ -40,9 +39,9 @@ private:
 
 	void record();
 	void playback();
-	bool checkPlaybackStop();
 
 	clock_t mGlobalClock;
+	clock_t mPreviousRecordingTime;
 	bool mLooping;
 
 	MouseClickEventsWorker mMouseClickWorker;

@@ -101,9 +101,6 @@ QGroupBox* EQInputRecorder::initPlayingGroupBox()
 	connect(loopCheckbox, &QCheckBox::stateChanged, [this](int state) {
 		worker->setPlaybackLoop(state);
 	});
-	connect(worker, &EQInputRecorderWorker::canceledPlaybackLoop, [loopCheckbox]() {
-		loopCheckbox->setCheckState(Qt::Unchecked);
-	});
 	connect(playbackButton, &QPushButton::clicked, this, &EQInputRecorder::disableButtons);
 	connect(worker, &EQInputRecorderWorker::finishedPlayback, this, &EQInputRecorder::enableButtons);
 
