@@ -28,17 +28,17 @@ signals:
 	void canceledPlaybackLoop();
 
 private:
-	const uint8_t COUNTDOWN{ 3 };
+	static constexpr uint8_t COUNTDOWN{ 3 };
 	void setupTimers(const bool recording);
 
 	void startRealRecording();
 	void startRealPlayBack();
 	bool checkPlaybackStop();
 
-	clock_t recordingTime;
-	bool playbackLoop;
+	clock_t mGlobalClock;
+	bool mLooping;
 
-	MouseClickEventsWorker mouseClickEventsWorker;
-	MouseMoveEventsWorker mouseMoveEventsWorker;
-	KeyboardEventsWorker keyboardEventsWorker;
+	MouseClickEventsWorker mMouseClickWorker;
+	MouseMoveEventsWorker mMouseMoveWorker;
+	KeyboardEventsWorker mKeyboardWorker;
 };
