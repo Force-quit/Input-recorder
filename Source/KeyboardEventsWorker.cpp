@@ -1,77 +1,90 @@
 #include "../Headers/KeyboardEventsWorker.h"
-#include <Windows.h>
-#include "../Headers/EQKeyboardEvent.h"
-#include <QThread>
-#include <QVector>
-#include <forward_list>
+#include <set>
 
-KeyboardEventsWorker::KeyboardEventsWorker(clock_t& currentRecTime, QVector<uint8_t> keys)
-	: currentRecTime(currentRecTime), targetKeys(keys), pressedKeys(), keysToRemove(), continueListening{}, keyboardEvents(),
-	readyToShare{}
-{}
-
-void KeyboardEventsWorker::startListening()
+KeyboardEventsWorker::KeyboardEventsWorker(clock_t& currentRecTime)
+	: mGlobalClock{ currentRecTime },
+	mContinueListening{},
+	mKeyboardEvents(),
+	mListenThread()
 {
-	reset();
-	
-	while (continueListening)
-	{
-		for (uint8_t currentKey : targetKeys)
-		{
-			if (GetAsyncKeyState(currentKey))
-			{
-				if (!pressedKeys.contains(currentKey))
-				{
-					keyboardEvents.push_front(EQKeyboardEvent(currentRecTime, currentKey, 0));
-					pressedKeys.insert(currentKey);
-				}
-			}
 
-			for (uint8_t pressedKey : pressedKeys)
-			{
-				if (!GetAsyncKeyState(pressedKey))
-				{
-					keyboardEvents.push_front(EQKeyboardEvent(currentRecTime, pressedKey, KEYEVENTF_KEYUP));
-					keysToRemove.push_back(pressedKey);
-				}
-			}
-
-			for (uint8_t keyToRemove : keysToRemove)
-				pressedKeys.remove(keyToRemove);
-			keysToRemove.clear();
-		}
-
-		QThread::msleep(1);
-	}
-
-	readyToShare = true;
 }
 
 KeyboardEventsWorker::~KeyboardEventsWorker()
-{}
-
-QVector<EQKeyboardEvent> KeyboardEventsWorker::getKeyboardEvents() const
 {
-	QVector<EQKeyboardEvent> events;
-	for (auto& i : keyboardEvents)
-		events.push_back(i);
-	return events;
-}
-
-bool KeyboardEventsWorker::isReadyToShare() const
-{
-	return readyToShare;
-}
-
-void KeyboardEventsWorker::reset()
-{
-	pressedKeys.clear();
-	keyboardEvents.clear();
-	readyToShare = false;
-	continueListening = true;
+	if (mListenThread.joinable())
+	{
+		stopListening();
+	}
 }
 
 void KeyboardEventsWorker::stopListening()
 {
-	continueListening = false;
+	mContinueListening = false;
+	mListenThread.join();
+}
+
+void KeyboardEventsWorker::startListening()
+{
+	mContinueListening = true;
+	mKeyboardEvents.clear();
+	mListenThread = std::thread(&KeyboardEventsWorker::listenLoop, this);
+}
+
+std::vector<KeyboardEvent>::const_iterator KeyboardEventsWorker::constBeginIterator() const
+{
+	return mKeyboardEvents.cbegin();
+}
+
+std::vector<KeyboardEvent>::const_iterator KeyboardEventsWorker::constEndIterator() const
+{
+	return mKeyboardEvents.cend();
+}
+
+void KeyboardEventsWorker::listenLoop()
+{
+	std::set<uint8_t> pressedKeys;
+
+	resetWindowsPressedKeysBuffer();
+
+	while (mContinueListening)
+	{
+		for (uint8_t observedKey : KeyboardEvent::VK)
+		{
+			if (GetAsyncKeyState(observedKey))
+			{
+				if (!pressedKeys.contains(observedKey))
+				{
+					mKeyboardEvents.emplace_back(mGlobalClock, observedKey, KeyboardEvent::KeyState::KEY_DOWN);
+					pressedKeys.insert(observedKey);
+				}
+			}
+			else if (pressedKeys.contains(observedKey))
+			{
+				mKeyboardEvents.emplace_back(mGlobalClock, observedKey, KeyboardEvent::KeyState::KEY_UP);
+				pressedKeys.erase(observedKey);
+			}
+		}
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+
+	// escape key up
+	if (mKeyboardEvents.back().virtualKey() == VK_ESCAPE)
+	{
+		mKeyboardEvents.pop_back(); 
+	}
+	// escape key down
+	if (mKeyboardEvents.back().virtualKey() == VK_ESCAPE)
+	{
+		mKeyboardEvents.pop_back();
+	}
+}
+
+void KeyboardEventsWorker::resetWindowsPressedKeysBuffer()
+{
+	for (uint8_t observedKey : KeyboardEvent::VK)
+	{
+		GetAsyncKeyState(observedKey);
+	}
 }
