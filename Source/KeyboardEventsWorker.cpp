@@ -1,5 +1,6 @@
 #include "../Headers/KeyboardEventsWorker.h"
 #include <set>
+#include <array>
 
 KeyboardEventsWorker::KeyboardEventsWorker(clock_t& globalClock)
 	: EventsWorker(globalClock)
@@ -9,24 +10,25 @@ KeyboardEventsWorker::KeyboardEventsWorker(clock_t& globalClock)
 
 void KeyboardEventsWorker::listenLoop()
 {
-	std::set<uint8_t> wPressedKeys;
+	std::array<bool, KeyboardEvent::VK.size()> wPressedKeys{};
 
 	while (mContinueListening)
 	{
-		for (uint8_t observedKey : KeyboardEvent::VK)
+		for (size_t i{}; i < KeyboardEvent::VK.size(); ++i)
 		{
-			if (GetAsyncKeyState(observedKey))
+			auto wObservedKey = KeyboardEvent::VK[i];
+			if (GetAsyncKeyState(wObservedKey))
 			{
-				if (!wPressedKeys.contains(observedKey))
+				if (!wPressedKeys[i])
 				{
-					mEvents.emplace_back(mGlobalClock, observedKey, KeyboardEvent::KeyState::KEY_DOWN);
-					wPressedKeys.insert(observedKey);
+					mEvents.emplace_back(mGlobalClock, wObservedKey, KeyboardEvent::KeyState::KEY_DOWN);
+					wPressedKeys[i] = true;
 				}
 			}
-			else if (wPressedKeys.contains(observedKey))
+			else if (wPressedKeys[i])
 			{
-				mEvents.emplace_back(mGlobalClock, observedKey, KeyboardEvent::KeyState::KEY_UP);
-				wPressedKeys.erase(observedKey);
+				mEvents.emplace_back(mGlobalClock, wObservedKey, KeyboardEvent::KeyState::KEY_UP);
+				wPressedKeys[i] = false;
 			}
 		}
 
@@ -34,12 +36,12 @@ void KeyboardEventsWorker::listenLoop()
 	}
 
 	// escape key up
-	if (mEvents.back().virtualKey() == VK_ESCAPE)
+	if (mEvents.size() != 0 && mEvents.back().virtualKey() == VK_ESCAPE)
 	{
 		mEvents.pop_back(); 
 	}
 	// escape key down
-	if (mEvents.back().virtualKey() == VK_ESCAPE)
+	if (mEvents.size() != 0 && mEvents.back().virtualKey() == VK_ESCAPE)
 	{
 		mEvents.pop_back();
 	}

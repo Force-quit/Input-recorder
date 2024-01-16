@@ -2,13 +2,19 @@
 
 #include <Windows.h>
 #include <time.h>
-#include <vector>
+#include <array>
 #include <unordered_map>
 
 class MouseClickEvent
 {
 public:
-	static const std::vector<int8_t> VK;
+	static constexpr std::array<int8_t, 5> VK{
+		VK_LBUTTON,
+		VK_RBUTTON,
+		VK_MBUTTON,
+		VK_XBUTTON1,
+		VK_XBUTTON2
+	};
 
 	enum class KeyState
 	{
