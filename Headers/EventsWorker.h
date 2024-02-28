@@ -1,5 +1,6 @@
 #pragma once
 
+#pragma warning(disable:5050)
 #include <thread>
 #include <vector>
 #include <functional>
