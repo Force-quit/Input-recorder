@@ -7,8 +7,8 @@
 #include <QCheckBox>
 #include "../Headers/EQInputRecorderWorker.h"
 
-EQInputRecorder::EQInputRecorder(QWidget *parent)
-	: QMainWindow(parent), workerThread(), worker{new EQInputRecorderWorker}, recordingButton{}, playbackButton{}
+EQInputRecorder::EQInputRecorder()
+	: QMainWindow(), workerThread(), worker{new EQInputRecorderWorker}, recordingButton{}, playbackButton{}
 {
 	worker->moveToThread(&workerThread);
 	connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);

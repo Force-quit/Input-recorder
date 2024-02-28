@@ -8,11 +8,11 @@ KeyboardEventsWorker::KeyboardEventsWorker(clock_t& globalClock)
 
 }
 
-void KeyboardEventsWorker::listenLoop()
+void KeyboardEventsWorker::listenLoop(std::stop_token stopToken)
 {
 	std::array<bool, KeyboardEvent::VK.size()> wPressedKeys{};
 
-	while (mContinueListening)
+	while (!stopToken.stop_requested())	
 	{
 		for (size_t i{}; i < KeyboardEvent::VK.size(); ++i)
 		{

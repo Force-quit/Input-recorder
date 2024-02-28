@@ -12,7 +12,7 @@ class EQInputRecorder : public QMainWindow
 	Q_OBJECT
 
 public:
-	EQInputRecorder(QWidget *parent = nullptr);
+	EQInputRecorder();
 	~EQInputRecorder();
 
 private slots:

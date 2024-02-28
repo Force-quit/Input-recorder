@@ -7,12 +7,12 @@ MouseClickEventsWorker::MouseClickEventsWorker(clock_t& globalClock)
 
 }
 
-void MouseClickEventsWorker::listenLoop()
+void MouseClickEventsWorker::listenLoop(std::stop_token stopToken)
 {
 	std::array<bool, MouseClickEvent::VK.size()> wPressedKeys{};
 	POINT wMousePos;
 
-	while (mContinueListening)
+	while (!stopToken.stop_requested())
 	{
 		for (size_t i{}; i < MouseClickEvent::VK.size(); ++i)
 		{

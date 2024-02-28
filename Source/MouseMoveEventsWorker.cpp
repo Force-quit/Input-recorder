@@ -6,13 +6,13 @@ MouseMoveEventsWorker::MouseMoveEventsWorker(clock_t& currentRecTime)
 
 }
 
-void MouseMoveEventsWorker::listenLoop()
+void MouseMoveEventsWorker::listenLoop(std::stop_token stopToken)
 {
 	POINT wPreviousMousePos;
 	GetCursorPos(&wPreviousMousePos);
 
 	POINT wTempPoint;
-	while (mContinueListening)
+	while (!stopToken.stop_requested())
 	{
 		GetCursorPos(&wTempPoint);
 		if (wTempPoint.x != wPreviousMousePos.x || wTempPoint.y != wPreviousMousePos.y)
