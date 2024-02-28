@@ -1,5 +1,4 @@
 #include "../Headers/KeyboardEventsWorker.h"
-#include <set>
 #include <array>
 
 KeyboardEventsWorker::KeyboardEventsWorker(clock_t& globalClock)
