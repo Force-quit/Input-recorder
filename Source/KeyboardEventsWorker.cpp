@@ -1,4 +1,6 @@
 #include "../Headers/KeyboardEventsWorker.h"
+
+import eutilities;
 #include <array>
 
 KeyboardEventsWorker::KeyboardEventsWorker(clock_t& globalClock)
@@ -16,7 +18,7 @@ void KeyboardEventsWorker::listenLoop(std::stop_token stopToken)
 		for (size_t i{}; i < KeyboardEvent::VK.size(); ++i)
 		{
 			auto wObservedKey = KeyboardEvent::VK[i];
-			if (GetAsyncKeyState(wObservedKey))
+			if (eutilities::isPressed(wObservedKey))
 			{
 				if (!wPressedKeys[i])
 				{
@@ -31,7 +33,7 @@ void KeyboardEventsWorker::listenLoop(std::stop_token stopToken)
 			}
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		eutilities::sleepFor(1);
 	}
 
 	// escape key up
