@@ -1,5 +1,5 @@
 #include "../Headers/MouseClickEventsWorker.h"
-#include <set>
+#include <array>
 
 MouseClickEventsWorker::MouseClickEventsWorker(clock_t& globalClock)
 	: EventsWorker(globalClock)
@@ -7,28 +7,30 @@ MouseClickEventsWorker::MouseClickEventsWorker(clock_t& globalClock)
 
 }
 
-void MouseClickEventsWorker::listenLoop()
+void MouseClickEventsWorker::listenLoop(std::stop_token stopToken)
 {
-	std::set<uint8_t> wPressedKeys;
-	POINT wMousePos{};
+	std::array<bool, MouseClickEvent::VK.size()> wPressedKeys{};
+	POINT wMousePos;
 
-	while (mContinueListening)
+	while (!stopToken.stop_requested())
 	{
-		for (uint8_t wObservedKey : MouseClickEvent::VK)
+		for (size_t i{}; i < MouseClickEvent::VK.size(); ++i)
 		{
+			auto wObservedKey = MouseClickEvent::VK[i];
+
 			if (GetAsyncKeyState(wObservedKey))
 			{
-				if (!wPressedKeys.contains(wObservedKey))
+				if (!wPressedKeys[i])
 				{
 					GetCursorPos(&wMousePos);
 					mEvents.emplace_back(mGlobalClock, wMousePos, wObservedKey, MouseClickEvent::KeyState::KEY_DOWN);
-					wPressedKeys.insert(wObservedKey);
+					wPressedKeys[i] = true;
 				}
 			}
-			else if (wPressedKeys.contains(wObservedKey))
+			else if (wPressedKeys[i])
 			{
 				mEvents.emplace_back(mGlobalClock, wMousePos, wObservedKey, MouseClickEvent::KeyState::KEY_UP);
-				wPressedKeys.erase(wObservedKey);
+				wPressedKeys[i] = false;
 			}
 		}
 

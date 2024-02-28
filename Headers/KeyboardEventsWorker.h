@@ -9,6 +9,6 @@ public:
 	KeyboardEventsWorker(clock_t& globalClock);
 
 protected:
-	void listenLoop() override;
+	void listenLoop(std::stop_token stopToken) override;
 	void resetWindowsPressedKeysBuffer() override;
 };

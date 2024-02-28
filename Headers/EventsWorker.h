@@ -2,6 +2,7 @@
 
 #include <thread>
 #include <vector>
+#include <functional>
 
 template <class EventClass>
 class EventsWorker
@@ -9,32 +10,22 @@ class EventsWorker
 public:
 	EventsWorker(clock_t& globalClock)
 		: mGlobalClock{ globalClock },
-		mContinueListening{},
 		mEvents(),
 		mListenThread()
 	{
 
 	}
 
-	~EventsWorker()
-	{
-		if (mListenThread.joinable())
-		{
-			stopListening();
-		}
-	}
-
 	void startListening()
 	{
-		mContinueListening = true;
 		mEvents.clear();
 		resetWindowsPressedKeysBuffer();
-		mListenThread = std::thread(&EventsWorker::listenLoop, this);
+		mListenThread = std::jthread(std::bind_front(&EventsWorker::listenLoop, this));
 	}
 
 	void stopListening()
 	{
-		mContinueListening = false;
+		mListenThread.request_stop();
 		mListenThread.join();
 	}
 
@@ -50,13 +41,11 @@ public:
 
 protected:
 	const clock_t& mGlobalClock;
-	bool mContinueListening;
-
 	std::vector<EventClass> mEvents;
 
-	virtual void listenLoop() = 0;
+	virtual void listenLoop(std::stop_token stopToken) = 0;
 	virtual void resetWindowsPressedKeysBuffer() {};
 
 private:
-	std::thread mListenThread;
+	std::jthread mListenThread;
 };
