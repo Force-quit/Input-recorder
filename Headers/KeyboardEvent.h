@@ -138,8 +138,7 @@ public:
 
 private:
 	static constexpr DWORD convertKeyState(KeyState keyState);
-
 	const clock_t mEventTime;
-	DWORD vkCode;
-	DWORD dwFlags;
+	const DWORD vkCode;
+	const DWORD dwFlags;
 };
