@@ -66,7 +66,7 @@
     <OutDir>deployment\components\com.vendor.product\data\</OutDir>
   </PropertyGroup>
   <PropertyGroup Label="QtDeploy" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <QtDeploy>true</QtDeploy>
+    <QtDeploy>false</QtDeploy>
     <QtDeployNoTranslations>
     </QtDeployNoTranslations>
     <QtDeployVsContent>
