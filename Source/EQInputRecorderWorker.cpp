@@ -7,7 +7,6 @@
 EQInputRecorderWorker::EQInputRecorderWorker()
 	: mGlobalClock{},
 	mPlaybackLooping{},
-	stopEverything{},
 	mPreviousRecordingTime(mGlobalClock),
 	mPressEventWorker(mGlobalClock),
 	mMouseMoveWorker(mGlobalClock)
@@ -34,7 +33,7 @@ void EQInputRecorderWorker::record()
 	mPressEventWorker.startListening();
 	mMouseMoveWorker.startListening();
 
-	while (!eutilities::isPressed(eutilities::Key::ESCAPE) && !stopEverything)
+	while (!eutilities::isPressed(eutilities::Key::ESCAPE) && !QThread::currentThread()->isInterruptionRequested())
 	{
 		mGlobalClock = std::clock() - wRecordingStart;
 		QThread::msleep(1);
@@ -79,7 +78,7 @@ void EQInputRecorderWorker::playback()
 
 			QThread::msleep(1);
 
-			wUserStoppedPlayback = eutilities::isPressed(eutilities::Key::ESCAPE) || stopEverything;
+			wUserStoppedPlayback = eutilities::isPressed(eutilities::Key::ESCAPE) || QThread::currentThread()->isInterruptionRequested();
 
 		} while (mGlobalClock < mPreviousRecordingTime && !wUserStoppedPlayback);
 	} while (mPlaybackLooping && !wUserStoppedPlayback);
@@ -116,9 +115,4 @@ void EQInputRecorderWorker::prepareFor(Sequence sequence)
 void EQInputRecorderWorker::setPlaybackLoop(bool playbackLoop)
 {
 	mPlaybackLooping = playbackLoop;
-}
-
-void EQInputRecorderWorker::appWasClosed()
-{
-	stopEverything = true;
 }

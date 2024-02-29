@@ -115,7 +115,7 @@ void EQInputRecorder::bringWindowInFront()
 
 EQInputRecorder::~EQInputRecorder() 
 {
-	worker->appWasClosed();
+	workerThread.requestInterruption();
 	workerThread.quit();
 	workerThread.wait();
 }

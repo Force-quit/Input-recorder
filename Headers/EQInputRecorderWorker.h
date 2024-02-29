@@ -15,7 +15,6 @@ public:
 	EQInputRecorderWorker();
 
 	void setPlaybackLoop(bool playbackLoop);
-	void appWasClosed();
 
 public slots:
 	void startRecording();
@@ -43,7 +42,6 @@ private:
 	clock_t mGlobalClock;
 	clock_t mPreviousRecordingTime;
 	bool mPlaybackLooping;
-	bool stopEverything;
 
 	MouseMoveEventsWorker mMouseMoveWorker;
 	PressEventWorker mPressEventWorker;
