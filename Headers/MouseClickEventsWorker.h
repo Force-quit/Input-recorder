@@ -10,5 +10,4 @@ public:
 
 protected:
 	void listenLoop(std::stop_token stopToken) override;
-	void resetWindowsPressedKeysBuffer() override;
 };

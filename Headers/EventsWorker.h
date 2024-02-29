@@ -45,7 +45,6 @@ protected:
 	std::vector<EventClass> mEvents;
 
 	virtual void listenLoop(std::stop_token stopToken) = 0;
-	virtual void resetWindowsPressedKeysBuffer() {};
 
 private:
 	std::jthread mListenThread;

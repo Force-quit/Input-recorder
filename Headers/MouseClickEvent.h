@@ -8,14 +8,6 @@
 class MouseClickEvent
 {
 public:
-	static constexpr std::array<int8_t, 5> VK{
-		VK_LBUTTON,
-		VK_RBUTTON,
-		VK_MBUTTON,
-		VK_XBUTTON1,
-		VK_XBUTTON2
-	};
-
 	enum class KeyState
 	{
 		KEY_UP,
