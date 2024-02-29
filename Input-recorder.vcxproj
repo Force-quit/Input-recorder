@@ -109,11 +109,8 @@
   <ItemGroup>
     <ClCompile Include="Source\EQInputRecorder.cpp" />
     <ClCompile Include="Source\EQInputRecorderWorker.cpp" />
-    <ClCompile Include="Source\KeyboardEvent.cpp" />
-    <ClCompile Include="Source\KeyboardEventsWorker.cpp" />
+    <ClCompile Include="Source\PressEventWorker.cpp" />
     <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\MouseClickEvent.cpp" />
-    <ClCompile Include="Source\MouseClickEventsWorker.cpp" />
     <ClCompile Include="Source\MouseMoveEventsWorker.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -124,18 +121,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\EventsWorker.h" />
-    <ClInclude Include="Headers\KeyboardEvent.h" />
+    <ClInclude Include="Headers\PressEvent.h" />
     <ClInclude Include="Resources\resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headers\KeyboardEventsWorker.h" />
+    <ClInclude Include="Headers\PressEventWorker.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\writing.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Headers\MouseClickEvent.h" />
-    <ClInclude Include="Headers\MouseClickEventsWorker.h" />
     <ClInclude Include="Headers\MouseMoveEvent.h" />
     <ClInclude Include="Headers\MouseMoveEventsWorker.h" />
   </ItemGroup>

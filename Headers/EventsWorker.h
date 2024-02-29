@@ -20,7 +20,6 @@ public:
 	void startListening()
 	{
 		mEvents.clear();
-		resetWindowsPressedKeysBuffer();
 		mListenThread = std::jthread(std::bind_front(&EventsWorker::listenLoop, this));
 	}
 

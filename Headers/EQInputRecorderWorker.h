@@ -4,9 +4,8 @@
 #include <QObject>
 #include <QString>
 
+#include "PressEventWorker.h"
 #include "MouseMoveEventsWorker.h"
-#include "MouseClickEventsWorker.h"
-#include "KeyboardEventsWorker.h"
 
 class EQInputRecorderWorker  : public QObject
 {
@@ -16,6 +15,7 @@ public:
 	EQInputRecorderWorker();
 
 	void setPlaybackLoop(bool playbackLoop);
+	void appWasClosed();
 
 public slots:
 	void startRecording();
@@ -43,8 +43,8 @@ private:
 	clock_t mGlobalClock;
 	clock_t mPreviousRecordingTime;
 	bool mPlaybackLooping;
+	bool stopEverything;
 
-	MouseClickEventsWorker mMouseClickWorker;
 	MouseMoveEventsWorker mMouseMoveWorker;
-	KeyboardEventsWorker mKeyboardWorker;
+	PressEventWorker mPressEventWorker;
 };

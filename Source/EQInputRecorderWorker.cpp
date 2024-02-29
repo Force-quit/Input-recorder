@@ -7,10 +7,10 @@
 EQInputRecorderWorker::EQInputRecorderWorker()
 	: mGlobalClock{},
 	mPlaybackLooping{},
-	mPreviousRecordingTime{},
-	mMouseClickWorker(mGlobalClock),
-	mMouseMoveWorker(mGlobalClock),
-	mKeyboardWorker(mGlobalClock)
+	stopEverything{},
+	mPreviousRecordingTime(mGlobalClock),
+	mPressEventWorker(mGlobalClock),
+	mMouseMoveWorker(mGlobalClock)
 {
 }
 
@@ -31,12 +31,10 @@ void EQInputRecorderWorker::record()
 	clock_t wRecordingStart{ std::clock() };
 	mGlobalClock = wRecordingStart;
 
-	mKeyboardWorker.startListening();
-	mMouseClickWorker.startListening();
+	mPressEventWorker.startListening();
 	mMouseMoveWorker.startListening();
 
-	GetAsyncKeyState(VK_ESCAPE);
-	while (!GetAsyncKeyState(VK_ESCAPE))
+	while (!eutilities::isPressed(eutilities::Key::ESCAPE) && !stopEverything)
 	{
 		mGlobalClock = std::clock() - wRecordingStart;
 		QThread::msleep(1);
@@ -44,8 +42,7 @@ void EQInputRecorderWorker::record()
 
 	mPreviousRecordingTime = mGlobalClock;
 	mMouseMoveWorker.stopListening();
-	mMouseClickWorker.stopListening();
-	mKeyboardWorker.stopListening();
+	mPressEventWorker.stopListening();
 
 	emit finishedRecording();
 	emit displayText("Finished recording");
@@ -56,18 +53,15 @@ void EQInputRecorderWorker::playback()
 	emit displayText("Playback started");
 	bool wUserStoppedPlayback{};
 	EXECUTION_STATE wPreviousExecutionState{ SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED) };
-	INPUT wTempInputStruct{};
-	GetAsyncKeyState(VK_ESCAPE);
 
-	do // Playback loop
+	do
 	{
 		auto wMouseMoveEventsIt = mMouseMoveWorker.constBeginIterator();
-		auto wMouseClickEventsIt = mMouseClickWorker.constBeginIterator();
-		auto wKeyboardEventsIt = mKeyboardWorker.constBeginIterator();
+		auto wMouseClickEventsIt = mPressEventWorker.constBeginIterator();
 
 		clock_t wPlaybackStart{ std::clock() };
 
-		do // Playback execution
+		do
 		{
 			mGlobalClock = std::clock() - wPlaybackStart;
 
@@ -77,21 +71,15 @@ void EQInputRecorderWorker::playback()
 				++wMouseMoveEventsIt;
 			}
 
-			while (wMouseClickEventsIt != mMouseClickWorker.constEndIterator() && wMouseClickEventsIt->eventTime() <= mGlobalClock)
+			while (wMouseClickEventsIt != mPressEventWorker.constEndIterator() && wMouseClickEventsIt->mEventTime <= mGlobalClock)
 			{
-				wMouseClickEventsIt->play(wTempInputStruct);
+				wMouseClickEventsIt->play();
 				++wMouseClickEventsIt;
-			}
-
-			while (wKeyboardEventsIt != mKeyboardWorker.constEndIterator() && wKeyboardEventsIt->eventTime() <= mGlobalClock)
-			{
-				wKeyboardEventsIt->play(wTempInputStruct);
-				++wKeyboardEventsIt;
 			}
 
 			QThread::msleep(1);
 
-			wUserStoppedPlayback = GetAsyncKeyState(VK_ESCAPE);
+			wUserStoppedPlayback = eutilities::isPressed(eutilities::Key::ESCAPE) || stopEverything;
 
 		} while (mGlobalClock < mPreviousRecordingTime && !wUserStoppedPlayback);
 	} while (mPlaybackLooping && !wUserStoppedPlayback);
@@ -128,4 +116,9 @@ void EQInputRecorderWorker::prepareFor(Sequence sequence)
 void EQInputRecorderWorker::setPlaybackLoop(bool playbackLoop)
 {
 	mPlaybackLooping = playbackLoop;
+}
+
+void EQInputRecorderWorker::appWasClosed()
+{
+	stopEverything = true;
 }

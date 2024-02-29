@@ -25,22 +25,13 @@
     <ClCompile Include="Source\EQInputRecorderWorker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\KeyboardEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\KeyboardEventsWorker.cpp">
+    <ClCompile Include="Source\PressEventWorker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\MouseMoveEventsWorker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MouseClickEvent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MouseClickEventsWorker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -64,16 +55,10 @@
     <ClInclude Include="Headers\MouseMoveEventsWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\MouseClickEvent.h">
+    <ClInclude Include="Headers\PressEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\MouseClickEventsWorker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\KeyboardEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Headers\KeyboardEventsWorker.h">
+    <ClInclude Include="Headers\PressEventWorker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Resources\resource.h">
