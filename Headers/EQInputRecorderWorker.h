@@ -38,6 +38,7 @@ private:
 
 	void record();
 	void playback();
+	bool playbackOnce();
 
 	clock_t mGlobalClock;
 	clock_t mPreviousRecordingTime;

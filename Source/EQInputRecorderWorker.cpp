@@ -50,42 +50,48 @@ void EQInputRecorderWorker::record()
 void EQInputRecorderWorker::playback()
 {
 	emit displayText("Playback started");
-	bool wUserStoppedPlayback{};
 	EXECUTION_STATE wPreviousExecutionState{ SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED) };
 
-	do
+	bool wUserStoppedPlayback;
+	do 
 	{
-		auto wMouseMoveEventsIt = mMouseMoveWorker.constBeginIterator();
-		auto wMouseClickEventsIt = mPressEventWorker.constBeginIterator();
-
-		clock_t wPlaybackStart{ std::clock() };
-
-		do
-		{
-			mGlobalClock = std::clock() - wPlaybackStart;
-
-			while (wMouseMoveEventsIt != mMouseMoveWorker.constEndIterator() && wMouseMoveEventsIt->eventPlayTime() <= mGlobalClock)
-			{
-				wMouseMoveEventsIt->play();
-				++wMouseMoveEventsIt;
-			}
-
-			while (wMouseClickEventsIt != mPressEventWorker.constEndIterator() && wMouseClickEventsIt->mEventTime <= mGlobalClock)
-			{
-				wMouseClickEventsIt->play();
-				++wMouseClickEventsIt;
-			}
-
-			QThread::msleep(1);
-
-			wUserStoppedPlayback = eutilities::isPressed(eutilities::Key::ESCAPE) || QThread::currentThread()->isInterruptionRequested();
-
-		} while (mGlobalClock < mPreviousRecordingTime && !wUserStoppedPlayback);
+		wUserStoppedPlayback = playbackOnce();
 	} while (mPlaybackLooping && !wUserStoppedPlayback);
 	
 	emit finishedPlayback();
 	SetThreadExecutionState(wPreviousExecutionState);
 	emit displayText("Playback ended");
+}
+
+bool EQInputRecorderWorker::playbackOnce()
+{
+	auto wMouseMoveEventsIt = mMouseMoveWorker.constBeginIterator();
+	auto wMouseClickEventsIt = mPressEventWorker.constBeginIterator();
+	bool wUserStoppedPlayback{};
+	clock_t wPlaybackStart{ std::clock() };
+
+	do 
+	{
+		mGlobalClock = std::clock() - wPlaybackStart;
+
+		while (wMouseMoveEventsIt != mMouseMoveWorker.constEndIterator() && wMouseMoveEventsIt->mEventTime <= mGlobalClock)
+		{
+			wMouseMoveEventsIt->play();
+			++wMouseMoveEventsIt;
+		}
+
+		while (wMouseClickEventsIt != mPressEventWorker.constEndIterator() && wMouseClickEventsIt->mEventTime <= mGlobalClock)
+		{
+			wMouseClickEventsIt->play();
+			++wMouseClickEventsIt;
+		}
+
+		QThread::msleep(1);
+
+		wUserStoppedPlayback = eutilities::isPressed(eutilities::Key::ESCAPE) || QThread::currentThread()->isInterruptionRequested();
+	} while (mGlobalClock < mPreviousRecordingTime && !wUserStoppedPlayback);
+
+	return wUserStoppedPlayback;
 }
 
 void EQInputRecorderWorker::prepareFor(Sequence sequence)
