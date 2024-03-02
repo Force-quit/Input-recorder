@@ -1,5 +1,6 @@
 #pragma once
 
+#pragma warning(disable:5050)
 #include <thread>
 #include <vector>
 #include <functional>
@@ -19,7 +20,6 @@ public:
 	void startListening()
 	{
 		mEvents.clear();
-		resetWindowsPressedKeysBuffer();
 		mListenThread = std::jthread(std::bind_front(&EventsWorker::listenLoop, this));
 	}
 
@@ -44,7 +44,6 @@ protected:
 	std::vector<EventClass> mEvents;
 
 	virtual void listenLoop(std::stop_token stopToken) = 0;
-	virtual void resetWindowsPressedKeysBuffer() {};
 
 private:
 	std::jthread mListenThread;

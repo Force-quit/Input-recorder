@@ -1,5 +1,7 @@
 #include "../Headers/MouseMoveEventsWorker.h"
 
+import eutilities;
+
 MouseMoveEventsWorker::MouseMoveEventsWorker(clock_t& currentRecTime)
 	: EventsWorker(currentRecTime)
 {
@@ -21,6 +23,6 @@ void MouseMoveEventsWorker::listenLoop(std::stop_token stopToken)
 			mEvents.emplace_back(mGlobalClock, wPreviousMousePos);
 		}
 
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		eutilities::sleepFor(1);
 	}
 }
