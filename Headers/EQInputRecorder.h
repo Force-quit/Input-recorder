@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QThread>
+#include <QBoxLayout>
 #include "EQInputRecorderWorker.h"
 
 class EQInputRecorder : public QMainWindow
@@ -19,15 +20,19 @@ private slots:
 	void bringWindowInFront();
 	void disableButtons();
 	void enableButtons();
+	void save();
+	void load();
 
 private:
 	QGroupBox* initOutputGroupBox();
 	QGroupBox* initRecordingGroupBox();
-	QGroupBox* initPlayingGroupBox();
+	QGroupBox* initPlaybackGroupBox();
+	QHBoxLayout* initSaveAndLoad();
 
-	QPushButton* recordingButton;
-	QPushButton* playbackButton;
-
-	EQInputRecorderWorker* worker;
-	QThread workerThread;
+	QPushButton* mRecordingButton;
+	QPushButton* mPlaybackButton;
+	QPushButton* mSaveButton;
+	QPushButton* mLoadButton;
+	EQInputRecorderWorker* mInputRecorderWorker;
+	QThread mWorkerThread;
 };

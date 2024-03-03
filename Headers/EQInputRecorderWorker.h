@@ -15,6 +15,10 @@ public:
 	EQInputRecorderWorker();
 
 	void setPlaybackLoop(bool playbackLoop);
+	//constexpr bool canSave()
+	//{
+	//	return
+	//}
 
 public slots:
 	void startRecording();

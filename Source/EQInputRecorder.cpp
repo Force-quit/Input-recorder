@@ -8,42 +8,61 @@
 #include "../Headers/EQInputRecorderWorker.h"
 
 EQInputRecorder::EQInputRecorder()
-	: QMainWindow(), workerThread(), worker{new EQInputRecorderWorker}, recordingButton{}, playbackButton{}
+	: QMainWindow(),
+	mRecordingButton{},
+	mPlaybackButton{},
+	mSaveButton{},
+	mLoadButton{},
+	mInputRecorderWorker{ new EQInputRecorderWorker },
+	mWorkerThread()
 {
-	worker->moveToThread(&workerThread);
-	connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
-	connect(worker, &EQInputRecorderWorker::finishedRecording, this, &EQInputRecorder::bringWindowInFront);
-	connect(worker, &EQInputRecorderWorker::finishedPlayback, this, &EQInputRecorder::bringWindowInFront);
-	workerThread.start();
+	QWidget* wCentralWidget{ new QWidget };
+	QVBoxLayout* wCentralLayout{ new QVBoxLayout };
+	wCentralWidget->setLayout(wCentralLayout);
 
+	wCentralLayout->addWidget(initOutputGroupBox());
 
-	QWidget* centralWidget{ new QWidget };
-	QVBoxLayout* centralLayout{ new QVBoxLayout };
+	QHBoxLayout* wRecordAndPlaybackLayout{ new QHBoxLayout };
+	wRecordAndPlaybackLayout->addWidget(initRecordingGroupBox());
+	wRecordAndPlaybackLayout->addWidget(initPlaybackGroupBox());
+	wCentralLayout->addLayout(wRecordAndPlaybackLayout);
 
-	QGroupBox* ouputGroupBox{ initOutputGroupBox() };
+	wCentralLayout->addLayout(initSaveAndLoad());
 
-	QHBoxLayout* bottomLayout{ new QHBoxLayout };
-	bottomLayout->addWidget(initRecordingGroupBox());
-	bottomLayout->addWidget(initPlayingGroupBox());
+	connect(&mWorkerThread, &QThread::finished, mInputRecorderWorker, &QObject::deleteLater);
+	connect(mInputRecorderWorker, &EQInputRecorderWorker::finishedRecording, this, &EQInputRecorder::bringWindowInFront);
+	connect(mInputRecorderWorker, &EQInputRecorderWorker::finishedPlayback, this, &EQInputRecorder::bringWindowInFront);
 
-	centralLayout->addWidget(ouputGroupBox);
-	centralLayout->addLayout(bottomLayout);
-	centralWidget->setLayout(centralLayout);
-	setCentralWidget(centralWidget);
+	mInputRecorderWorker->moveToThread(&mWorkerThread);
+	mWorkerThread.start();
+
 	setWindowIcon(QIcon(":/images/writing.png"));
+	setCentralWidget(wCentralWidget);
 }
-
 
 void EQInputRecorder::disableButtons()
 {
-	recordingButton->setEnabled(false);
-	playbackButton->setEnabled(false);
+	mPlaybackButton->setEnabled(false);
+	mRecordingButton->setEnabled(false);
+	mSaveButton->setEnabled(false);
+	mLoadButton->setEnabled(false);
 }
 
 void EQInputRecorder::enableButtons()
 {
-	playbackButton->setEnabled(true);
-	recordingButton->setEnabled(true);
+	mPlaybackButton->setEnabled(true);
+	mRecordingButton->setEnabled(true);
+	mSaveButton->setEnabled(true);
+	mLoadButton->setEnabled(true);
+}
+
+void EQInputRecorder::save()
+{
+	//if (mInputRecorderWorker->)
+}
+
+void EQInputRecorder::load()
+{
 }
 
 QGroupBox* EQInputRecorder::initOutputGroupBox()
@@ -54,7 +73,7 @@ QGroupBox* EQInputRecorder::initOutputGroupBox()
 
 	QLabel* outputLabel{ new QLabel("Current status :") };
 	QLabel* ouputText{ new QLabel("Inactive") };
-	connect(worker, &EQInputRecorderWorker::displayText, ouputText, &QLabel::setText);
+	connect(mInputRecorderWorker, &EQInputRecorderWorker::displayText, ouputText, &QLabel::setText);
 
 	groupBoxLayout->addWidget(outputLabel);
 	groupBoxLayout->addWidget(ouputText);
@@ -68,44 +87,60 @@ QGroupBox* EQInputRecorder::initRecordingGroupBox()
 	QVBoxLayout* groupBoxLayout{ new QVBoxLayout };
 	groupBoxLayout->setAlignment(Qt::AlignCenter);
 
-	recordingButton = new QPushButton("Start recording");
+	mRecordingButton = new QPushButton("Start recording");
 	QLabel* recordingShortcutLabel{ new QLabel("Stop recording : ESC") };
-	
-	groupBoxLayout->addWidget(recordingButton);
+
+	groupBoxLayout->addWidget(mRecordingButton);
 	groupBoxLayout->addWidget(recordingShortcutLabel);
 	recordingGroupBox->setLayout(groupBoxLayout);
 
-	connect(recordingButton, &QPushButton::clicked, worker, &EQInputRecorderWorker::startRecording);
-	connect(recordingButton, &QPushButton::clicked, this, &EQInputRecorder::disableButtons);
-	connect(worker, &EQInputRecorderWorker::finishedRecording, this, &EQInputRecorder::enableButtons);
+	connect(mRecordingButton, &QPushButton::clicked, mInputRecorderWorker, &EQInputRecorderWorker::startRecording);
+	connect(mRecordingButton, &QPushButton::clicked, this, &EQInputRecorder::disableButtons);
+	connect(mInputRecorderWorker, &EQInputRecorderWorker::finishedRecording, this, &EQInputRecorder::enableButtons);
 
 	return recordingGroupBox;
 }
 
-QGroupBox* EQInputRecorder::initPlayingGroupBox()
+QGroupBox* EQInputRecorder::initPlaybackGroupBox()
 {
 	QGroupBox* currentRecordingGroupBox{ new QGroupBox("Playback") };
 	QVBoxLayout* groupBoxLayout{ new QVBoxLayout };
 	groupBoxLayout->setAlignment(Qt::AlignCenter);
-	
-	playbackButton = new QPushButton("Start playback");
+
+	mPlaybackButton = new QPushButton("Start playback");
 	QLabel* playbackShortcutLabel{ new QLabel("Stop playback : ESC") };
 	QCheckBox* loopCheckbox{ new QCheckBox("Looping") };
 
-	groupBoxLayout->addWidget(playbackButton);
+	groupBoxLayout->addWidget(mPlaybackButton);
 	groupBoxLayout->addWidget(loopCheckbox);
 	groupBoxLayout->addWidget(playbackShortcutLabel);
 	currentRecordingGroupBox->setLayout(groupBoxLayout);
 
-	connect(playbackButton, &QPushButton::clicked, worker, &EQInputRecorderWorker::startPlayback);
-	connect(loopCheckbox, &QCheckBox::stateChanged, [this](int state) {
-		worker->setPlaybackLoop(state);
-	});
-	connect(playbackButton, &QPushButton::clicked, this, &EQInputRecorder::disableButtons);
-	connect(worker, &EQInputRecorderWorker::finishedPlayback, this, &EQInputRecorder::enableButtons);
+	connect(mPlaybackButton, &QPushButton::clicked, mInputRecorderWorker, &EQInputRecorderWorker::startPlayback);
+	connect(loopCheckbox, &QCheckBox::stateChanged, [&](int state) {
+		mInputRecorderWorker->setPlaybackLoop(state);
+		});
+	connect(mPlaybackButton, &QPushButton::clicked, this, &EQInputRecorder::disableButtons);
+	connect(mInputRecorderWorker, &EQInputRecorderWorker::finishedPlayback, this, &EQInputRecorder::enableButtons);
 
 
 	return currentRecordingGroupBox;
+}
+
+QHBoxLayout* EQInputRecorder::initSaveAndLoad()
+{
+	QHBoxLayout* saveAndLoadLayout{ new QHBoxLayout };
+
+	mSaveButton = new QPushButton("Save session");
+	saveAndLoadLayout->addWidget(mSaveButton);
+
+	mLoadButton = new QPushButton("Load session");
+	saveAndLoadLayout->addWidget(mLoadButton);
+
+	connect(mSaveButton, &QPushButton::clicked, this, &EQInputRecorder::save);
+	connect(mLoadButton, &QPushButton::clicked, this, &EQInputRecorder::load);
+
+	return saveAndLoadLayout;
 }
 
 void EQInputRecorder::bringWindowInFront()
@@ -113,9 +148,9 @@ void EQInputRecorder::bringWindowInFront()
 	activateWindow();
 }
 
-EQInputRecorder::~EQInputRecorder() 
+EQInputRecorder::~EQInputRecorder()
 {
-	workerThread.requestInterruption();
-	workerThread.quit();
-	workerThread.wait();
+	mWorkerThread.requestInterruption();
+	mWorkerThread.quit();
+	mWorkerThread.wait();
 }
